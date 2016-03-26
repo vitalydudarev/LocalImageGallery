@@ -11,7 +11,7 @@ def create_thumbnails():
     result = { }
 
     for i in range(0, config.LIMIT):
-    	file_name = files[i]
+        file_name = files[i]
         thumb_file_name = ioutils.get_thumb_name(file_name, config.THUMB_PATH)
         if not os.path.exists(thumb_file_name):
             localimage.thumb(file_name, thumb_file_name, config.THUMB_SIZE)

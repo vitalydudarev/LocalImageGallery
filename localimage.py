@@ -14,11 +14,11 @@ def thumb(file_name, output_file_name, thumb_size):
         right = height + left
         lower = height
     else:
-    	delta = height - width
-    	left = 0
-    	upper = int(delta/2)
-    	right = width
-    	lower = width + upper
+        delta = height - width
+        left = 0
+        upper = int(delta/2)
+        right = width
+        lower = width + upper
 
     img = img.crop((left, upper, right, lower))
     img.thumbnail(thumb_size, Image.ANTIALIAS)

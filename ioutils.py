@@ -2,14 +2,14 @@ import os
 
 def create_directory(path):
     if not os.path.exists(path):
-	    os.makedirs(path)
+        os.makedirs(path)
 
 def get_files(path, extensions):
     files = []
     for dirpath, dirnames, filenames in os.walk(path):
-	    for filename in filenames:
-	        if filename.endswith(extensions):
-	            files.append(os.path.join(dirpath, filename))
+        for filename in filenames:
+            if filename.endswith(extensions):
+                files.append(os.path.join(dirpath, filename))
     return files
 
 def get_thumb_name(file_name, thumb_path):

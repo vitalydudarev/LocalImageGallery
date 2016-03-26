@@ -31,7 +31,7 @@ def get_images():
     result = { }
 
     for key, value in files.iteritems():
-	    result['/image' + key] = '/thumb/' + value
+        result['/image' + key] = '/thumb/' + value
 
     return json.dumps(result)
 
