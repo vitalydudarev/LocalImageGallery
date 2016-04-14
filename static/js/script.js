@@ -30,7 +30,6 @@ $(function () {
       var linksContainer = $('#links')
 
       $.each(result.images, function (image, thumb) {
-        console.log(result.images)
         $('<a/>')
           .append($('<img>').prop('src', thumb))
           .prop('href', image)
