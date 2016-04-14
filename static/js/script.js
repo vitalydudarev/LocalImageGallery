@@ -14,23 +14,36 @@
 $(function () {
   'use strict'
 
+  var intervalId;
+  setLoadDataInterval();
+
   // Load demo images from flickr:
-  $.ajax({
-    url: '/images',
-    dataType: 'json'
+  function loadData() {
+    $.ajax({
+      url: '/get_images',
+      dataType: 'json'
+    }).done(function (result) {
+      if (result.total != 0 && result.processed == result.total) {
+        clearInterval(intervalId);
+      }
 
-  }).done(function (result) {
-    var linksContainer = $('#links')
+      var linksContainer = $('#links')
 
-    $.each(result, function (image, thumb) {
-      $('<a/>')
-        .append($('<img>').prop('src', thumb))
-        .prop('href', image)
-        .prop('title', 'test title')
-        .attr('data-gallery', '')
-        .appendTo(linksContainer)
+      $.each(result.images, function (image, thumb) {
+        console.log(result.images)
+        $('<a/>')
+          .append($('<img>').prop('src', thumb))
+          .prop('href', image)
+          .prop('title', 'test title')
+          .attr('data-gallery', '')
+          .appendTo(linksContainer)
+      })
     })
-  })
+  }
+
+  function setLoadDataInterval() {
+    intervalId = setInterval(loadData, 3000);
+  }
 
   $('#borderless-checkbox').on('change', function () {
     var borderless = $(this).is(':checked')
