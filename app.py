@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, send_file
 import json
-import adapter
 import worker
 
 app = Flask(__name__)
@@ -13,7 +12,6 @@ def index():
 
 @app.route("/get_images")
 def get_images():
-    adapter.init()
     result = worker_proxy.get_result(lambda image: __get_image_link(image), lambda thumb: __get_thumb_link(thumb))
     return json.dumps(result)
 
