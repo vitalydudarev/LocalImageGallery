@@ -67,15 +67,21 @@ class Worker:
     def work(self):
         ioutils.create_directory(config.THUMB_PATH)
         files = ioutils.get_files(config.IMAGES_PATH, config.EXTENSIONS)
-        self.total_count = config.LIMIT
-        res = {}
 
-        for i in range(0, config.LIMIT):
-            self.q.put(files[i])
+        images_count = len(files)
+        if (images_count > config.LIMIT):
+            images_count = config.LIMIT)
 
-        for i in range(0, self.THREAD_COUNT):
-            t = threading.Thread(target=self.do_work)
-            t.daemon = True
-            t.start()
+        if (images_count > 0):
+            self.total_count = images_count
+            res = {}
 
-        self.q.join()
+            for i in range(0, images_count):
+                self.q.put(files[i])
+
+            for i in range(0, self.THREAD_COUNT):
+                t = threading.Thread(target=self.do_work)
+                t.daemon = True
+                t.start()
+
+            self.q.join()
