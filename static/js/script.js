@@ -23,7 +23,7 @@ $(function () {
       url: '/get_images',
       dataType: 'json'
     }).done(function (result) {
-      if (result.total != 0 && result.processed == result.total) {
+      if (result.total == 0 || (result.total != 0 && result.processed == result.total)) {
         clearInterval(intervalId);
       }
 
