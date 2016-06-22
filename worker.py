@@ -70,7 +70,7 @@ class Worker:
 
         images_count = len(files)
         if (images_count > config.LIMIT):
-            images_count = config.LIMIT)
+            images_count = config.LIMIT
 
         if (images_count > 0):
             self.total_count = images_count
