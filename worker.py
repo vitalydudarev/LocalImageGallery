@@ -9,6 +9,7 @@ class WorkerProxy:
 
     def __init__(self):
         self.worker = Worker()
+        self.worker.init()
 
     def get_result(self, get_image_link, get_thumb_link):
         if not self.started:
@@ -36,6 +37,7 @@ class Worker:
     result = []
     total_count = 0
     processed_count = 0
+    files_to_process = []
 
     def get_processed_count(self):
         return self.processed_count
@@ -64,7 +66,7 @@ class Worker:
             self.result.append(file_name)
             self.q.task_done()
 
-    def work(self):
+    def init(self):
         ioutils.create_directory(config.THUMB_PATH)
         files = ioutils.get_files(config.IMAGES_PATH, config.EXTENSIONS)
 
@@ -72,12 +74,15 @@ class Worker:
         if (images_count > config.LIMIT):
             images_count = config.LIMIT
 
-        if (images_count > 0):
-            self.total_count = images_count
+        self.files_to_process = files
+        self.total_count = images_count
+
+    def work(self):
+        if (self.total_count > 0):
             res = {}
 
-            for i in range(0, images_count):
-                self.q.put(files[i])
+            for i in range(0, self.total_count):
+                self.q.put(self.files_to_process[i])
 
             for i in range(0, self.THREAD_COUNT):
                 t = threading.Thread(target=self.do_work)
