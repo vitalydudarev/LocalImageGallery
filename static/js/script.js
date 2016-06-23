@@ -17,6 +17,9 @@ $(function () {
   var intervalId;
   setLoadDataInterval();
 
+  var waitDialog = $('#waitDialogModal');
+  showWaitDialog();
+
   // Load demo images from flickr:
   function loadData() {
     $.ajax({
@@ -29,13 +32,10 @@ $(function () {
 
       var progress = parseInt(result.processed / result.total * 100, 10);
 
-      $('#progressBar')
-        .prop('style', 'width:' + progress + '%')
-        .prop('aria-valuenow', progress)
-        .text(progress + '%')
+      updateProgressBar(progress);
 
       if (progress == 100)
-        $('#progress').css('display', 'none');
+        closeWaitDialog();
 
       var linksContainer = $('#links')
 
@@ -48,6 +48,21 @@ $(function () {
           .appendTo(linksContainer)
       })
     })
+  }
+
+  function updateProgressBar(progress) {
+    $('#progressBar')
+      .prop('style', 'width:' + progress + '%')
+      .prop('aria-valuenow', progress)
+      .text(progress + '%')
+  }
+
+  function showWaitDialog() {
+    waitDialog.modal('show');
+  }
+
+  function closeWaitDialog() {
+    waitDialog.modal('hide');
   }
 
   function setLoadDataInterval() {
