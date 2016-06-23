@@ -27,6 +27,16 @@ $(function () {
         clearInterval(intervalId);
       }
 
+      var progress = parseInt(result.processed / result.total * 100, 10);
+
+      $('#progressBar')
+        .prop('style', 'width:' + progress + '%')
+        .prop('aria-valuenow', progress)
+        .text(progress + '%')
+
+      if (progress == 100)
+        $('#progress').css('display', 'none');
+
       var linksContainer = $('#links')
 
       $.each(result.images, function (image, thumb) {
