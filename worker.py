@@ -36,10 +36,13 @@ class Worker:
 
     def __init__(self):
         self.__queue = Queue.Queue()
+        self.__current_result = []
         self.__result = []
         self.__total_count = 0
         self.__processed_count = 0
-        self.__files_to_process = 0
+        self.__files_to_process = []
+        self.__finished = False
+        self.__lock = threading.Lock()
 
     def get_processed_count(self):
         return self.__processed_count
@@ -48,24 +51,33 @@ class Worker:
         return self.__total_count
 
     def get_result(self):
-        res = self.__result
-        partial_res = []
-        for item in res:
-            partial_res.append(item)
+        if self.__finished:
+            return self.__result
 
-        self.__processed_count += len(self.__result)
-        del self.__result[:]
-        return partial_res
+        current_result = []
+        for item in self.__current_result:
+            current_result.append(item)
 
-    def get_current_count(self):
-        return len(self.__result)
+        self.__result += current_result
+        self.__processed_count += len(self.__current_result)
+
+        if self.__processed_count == self.__total_count:
+            self.__finished = True
+
+        with self.__lock:
+            del self.__current_result[:]
+
+        return current_result
 
     def do_work(self):
         while True:
             file_name = self.__queue.get()
             thumb_file_name = ioutils.get_thumb_name(file_name, config.THUMB_PATH)
             localimage.thumb(file_name, thumb_file_name, config.THUMB_SIZE)
-            self.__result.append(file_name)
+            
+            with self.__lock:
+                self.__current_result.append(file_name)
+            
             self.__queue.task_done()
 
     def init(self):
