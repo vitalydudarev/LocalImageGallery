@@ -66,7 +66,7 @@ $(function () {
   }
 
   function setLoadDataInterval() {
-    intervalId = setInterval(loadData, 3000);
+    intervalId = setInterval(loadData, 500);
   }
 
   $('#borderless-checkbox').on('change', function () {
