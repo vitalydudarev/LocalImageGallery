@@ -39,11 +39,11 @@ $(function () {
 
       var linksContainer = $('#links')
 
-      $.each(result.images, function (image, thumb) {
+      $.each(result.images, function (index, data) {
         $('<a/>')
-          .append($('<img>').prop('src', thumb))
-          .prop('href', image)
-          .prop('title', 'test title')
+          .append($('<img>').prop('src', data.thumb))
+          .prop('href', data.name)
+          .prop('title', data.title)
           .attr('data-gallery', '')
           .appendTo(linksContainer)
       })

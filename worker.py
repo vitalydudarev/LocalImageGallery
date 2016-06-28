@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import threading
 import Queue
 import ioutils
@@ -21,12 +22,12 @@ class WorkerProxy:
         total = self.__worker.get_total_count()
         processed = self.__worker.get_processed_count()
 
-        imgs = {}
+        imgs = []
 
         for image in images:
             thumb = get_thumb_link(ioutils.get_thumb_name(image, config.THUMB_PATH))
             img = get_image_link(image)
-            imgs[img] = thumb
+            imgs.append({'name': img, 'thumb': thumb, 'title': image})
 
         return {'images': imgs, 'total': total, 'processed': processed}
 
@@ -77,7 +78,7 @@ class Worker:
             
             with self.__lock:
                 self.__current_result.append(file_name)
-            
+
             self.__queue.task_done()
 
     def init(self):
